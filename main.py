@@ -18,7 +18,7 @@ def get_process_list():
 
     return process_list
 
-
+#FCFS
 def FCFS(process_list):
     
     # sort based on arrival time
@@ -96,14 +96,98 @@ def display_gantt_chart_FCFS(process_list):
     print( process_list[-1].getCompletionTime(), end="\t") #last value is end time of last process
 
     print("")
-    
 
+
+
+#SJF- NON-PREEMPTIVE
+def non_preemptive(process_list):
+    process_list.sort(key=lambda process: (process.getArrivalTime(), process.getBurstTime()))
+    completed_processes = []
+    current_time = 0
+
+    while len(completed_processes) < len(process_list):
+        ready_queue = [p for p in process_list if p.getArrivalTime() <= current_time and p not in completed_processes]
+        if ready_queue:
+            process_to_execute = min(ready_queue, key=lambda x: x.getBurstTime())
+            process_to_execute.setStartingTime(current_time)
+            current_time += process_to_execute.getBurstTime()
+            process_to_execute.setCompletionTime(current_time)
+            process_to_execute.wait_time = process_to_execute.getStartingTime() - process_to_execute.getArrivalTime()
+            process_to_execute.TAT = process_to_execute.getCompletionTime() - process_to_execute.getArrivalTime()
+            completed_processes.append(process_to_execute)
+        else:
+            current_time += 1
+
+    return completed_processes
+
+
+
+def display_process_data_non_preemptive(process_list):
+    process_list.sort(key=lambda process: process.getProcessID())
+
+    print("+=======+===============+===============+==============+=================+")
+    print("| P.ID  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
+    print("+=======+===============+===============+==============+=================+")
+    total_WT = 0
+    total_TAT = 0
+    for i in range(len(process_list)):
+        total_WT += process_list[i].getWaitTime()
+        total_TAT += process_list[i].getTurnaroundTime()
+        print("| P", process_list[i].getProcessID(), "\t|",                 
+              "    ", process_list[i].getArrivalTime(), " \t| ",           
+              "   ", process_list[i].getBurstTime(), " \t|",                
+              "   ", process_list[i].getWaitTime(), " \t| ",               
+              "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  
+        print()
+    print("+=======+===============+===============+=================+===============+")
+    avg_WT = total_WT / len(process_list)
+    avg_TAT = total_TAT / len(process_list)
+    print(f'\n Average Waiting Time:  {avg_WT}')
+    print(f' Average Turnaround Time:  {avg_TAT}')
+    print("+=======+===============+===============+=================+===============+")
+    print("")
+
+
+
+
+def display_gantt_chart_non_preemptive(process_list):
+    completed_processes = []
+    current_time = 0
+    gantt_chart = []
+
+    process_list.sort(key=lambda process: process.getArrivalTime())
+
+    while len(completed_processes) < len(process_list):
+        ready_queue = [p for p in process_list if p.getArrivalTime() <= current_time and p not in completed_processes]
+        
+        if ready_queue:
+            process_to_execute = min(ready_queue, key=lambda x: x.getBurstTime())
+            gantt_chart.append((process_to_execute.getProcessID(), current_time))
+            current_time += process_to_execute.getBurstTime()
+            process_to_execute.setStartingTime(current_time - process_to_execute.getBurstTime())
+            process_to_execute.setCompletionTime(current_time)
+            completed_processes.append(process_to_execute)
+        else:
+            current_time += 1
+
+    gantt_chart.append((None, current_time))
+
+    print("===================GANTT CHART (Non-Preemptive SJF)======================")
+    for i in range(len(gantt_chart) - 1):
+        pid = gantt_chart[i][0]
+        print(f"|  P{pid}  ", end="\t")
+    print("| ")
+
+    for time in [start_time for _, start_time in gantt_chart]:
+        print(time, end="\t")
+    print()
+
+
+
+#MAIN MENU
 def display_menu():
-    # print("\nChoose a CPU Scheduling Algorithm:")
     print("1. First Come First Serve (FCFS)")
     print("2. Shortest Job First")
-    # print("2.1. Non-Preemptive Shortest Job First")
-    # print("2.2. Preemptive Shortest Job First")
     print("3. Round Robin")
     print("4. Exit")
 
@@ -123,18 +207,18 @@ def main():
             display_gantt_chart_FCFS(process_list_FCFS)
 
         elif choice == "2":
-            # sjf_non_preemptive(process_list)  # Non-Preemptive SJF
-
-            print("2.1. Non-Preemptive Shortest Job First")
-            print("2.2. Preemptive Shortest Job First")
-
-            choice = input()
-
-            if choice == "2.1":
-                # sjf_non_preemptive(process_list)  # Non-Preemptive SJF
+             print("\nChoose Non-Preemptive or Preemptive")
+             print("2.1. Non-Preemptive Shortest Job First")
+             print("2.2. Preemptive Shortest Job First")
+             choice1 = input()
+             if choice1 =="2.1":
+                print("\n+==================+ Non-Preemptive Shortest Job First (SJF) +==================+")
+                process_list_SJF = non_preemptive(process_list)
+                display_process_data_non_preemptive(process_list_SJF)
+                display_gantt_chart_non_preemptive(process_list_SJF)
                 break
 
-            elif choice == "2.2":
+             elif choice == "2.2":
                 break
 
         elif choice == "3":
