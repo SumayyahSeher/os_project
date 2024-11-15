@@ -264,7 +264,7 @@ def main():
             display_process_data_FCFS(process_list_FCFS)
             display_gantt_chart_FCFS(process_list_FCFS)
 
-         elif choice == "2":
+        elif choice == "2":
              while True: 
                 print("\nChoose Non-Preemptive or Preemptive")
                 print("1. Non-Preemptive Shortest Job First")
