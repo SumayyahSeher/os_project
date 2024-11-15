@@ -97,8 +97,6 @@ def display_gantt_chart_FCFS(process_list):
 
     print("")
 
-
-
 #SJF- NON-PREEMPTIVE
 def non_preemptive(process_list):
     process_list.sort(key=lambda process: (process.getArrivalTime(), process.getBurstTime()))
@@ -119,8 +117,6 @@ def non_preemptive(process_list):
             current_time += 1
 
     return completed_processes
-
-
 
 def display_process_data_non_preemptive(process_list):
     process_list.sort(key=lambda process: process.getProcessID())
@@ -146,9 +142,6 @@ def display_process_data_non_preemptive(process_list):
     print(f' Average Turnaround Time:  {avg_TAT}')
     print("+=======+===============+===============+=================+===============+")
     print("")
-
-
-
 
 def display_gantt_chart_non_preemptive(process_list):
     completed_processes = []
@@ -182,6 +175,71 @@ def display_gantt_chart_non_preemptive(process_list):
         print(time, end="\t")
     print()
 
+#SJF-PREEMPTIVE
+def sjf_preemptive(process_list):
+    gantt_chart = []
+    time = 0
+    ready_queue = []
+    completed_processes = []
+    while len(completed_processes) < len(process_list):
+        for process in process_list:
+            if process.getArrivalTime() <= time and process not in ready_queue and process not in completed_processes:
+                ready_queue.append(process)
+        if ready_queue:
+            ready_queue.sort(key=lambda p: p.getRemainingBurstTime())
+            current_process = ready_queue.pop(0)
+            if current_process.getStartingTime() is None:
+                current_process.setStartingTime(time)
+            gantt_chart.append((current_process.getProcessID(), time, time + 1))
+            time += 1
+            current_process.setRemainingBurstTime(current_process.getRemainingBurstTime() - 1)  # Decrease the burst time dynamically
+            if current_process.getRemainingBurstTime() == 0:
+                current_process.setCompletionTime(time)
+                current_process.TAT = current_process.getCompletionTime() - current_process.getArrivalTime()
+                current_process.wait_time = current_process.TAT - current_process.getBurstTime()
+                completed_processes.append(current_process)
+        else:
+            time += 1  
+    return process_list, gantt_chart
+
+def display_process_data_preemptive(process_list):
+    print("+=======+===============+===============+==============+=================+")
+    print("| P.ID  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
+    print("+=======+===============+===============+==============+=================+")
+    total_WT = 0
+    total_TAT = 0
+    for i in range(len(process_list)):
+        total_WT += process_list[i].getWaitTime()
+        total_TAT += process_list[i].getTurnaroundTime()
+        print("| P", process_list[i].getProcessID(), "\t|",                 
+              "    ", process_list[i].getArrivalTime(), " \t| ",           
+              "   ", process_list[i].getBurstTime(), " \t|",                
+              "   ", process_list[i].getWaitTime(), " \t| ",               
+              "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  
+        print()
+    print("+=======+===============+===============+================+===============+")
+    avg_WT = total_WT / len(process_list)
+    avg_TAT = total_TAT / len(process_list)
+    print(f'\n Average Waiting Time:  {avg_WT}')
+    print(f' Average Turnaround Time:  {avg_TAT}')
+    print("+=======+===============+===============+================+===============+")
+    print("")
+
+def display_gantt_chart_preemptive(gantt_chart):
+    print("\n=================== GANTT CHART (Preemptive SJF) =======================")
+    print("Process Execution Timeline:")
+    processes = []
+    times = []
+    for segment in gantt_chart:
+        if not processes or processes[-1] != segment[0]:  # Log process only when it changes
+            processes.append(segment[0])
+            times.append(segment[1])
+    for pid in processes:
+        print(f"|  P{pid}  ", end="")
+    print("|")
+    for time in times:
+        print(f"{time}\t", end="")
+    print(gantt_chart[-1][2])
 
 
 #MAIN MENU
@@ -206,20 +264,28 @@ def main():
             display_process_data_FCFS(process_list_FCFS)
             display_gantt_chart_FCFS(process_list_FCFS)
 
-        elif choice == "2":
-             print("\nChoose Non-Preemptive or Preemptive")
-             print("2.1. Non-Preemptive Shortest Job First")
-             print("2.2. Preemptive Shortest Job First")
-             choice1 = input()
-             if choice1 =="2.1":
-                print("\n+==================+ Non-Preemptive Shortest Job First (SJF) +==================+")
-                process_list_SJF = non_preemptive(process_list)
-                display_process_data_non_preemptive(process_list_SJF)
-                display_gantt_chart_non_preemptive(process_list_SJF)
-                break
+         elif choice == "2":
+             while True: 
+                print("\nChoose Non-Preemptive or Preemptive")
+                print("1. Non-Preemptive Shortest Job First")
+                print("2. Preemptive Shortest Job First")
+                choice1 = input()
+                if choice1 == "1":
+                    print("\n+==================+ Non-Preemptive Shortest Job First (SJF) +==================+")
+                    process_list_SJF = non_preemptive(process_list)
+                    display_process_data_non_preemptive(process_list_SJF)
+                    display_gantt_chart_non_preemptive(process_list_SJF)
+                    break  
 
-             elif choice == "2.2":
-                break
+                elif choice1 == "2":
+                    print("\n+==================+ Preemptive Shortest Job First (SJF) +==================+")
+                    process_list_preemptive, gantt_chart = sjf_preemptive(process_list) 
+                    display_process_data_preemptive(process_list_preemptive)
+                    display_gantt_chart_preemptive(gantt_chart)
+                    break  
+
+                else:
+                    print("Invalid choice. Please try again.")
 
         elif choice == "3":
             time_quantum = int(input("Enter Time Quantum for Round Robin: "))
@@ -233,11 +299,5 @@ def main():
         else:
             print("Invalid choice. Please try again.")
 
-    
-    
-
 if __name__ == '__main__':
     main()
-
-
-
