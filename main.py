@@ -235,12 +235,11 @@ def display_gantt_chart_preemptive(gantt_chart):
             processes.append(segment[0])
             times.append(segment[1])
     for pid in processes:
-        print(f"|  P{pid}  ", end="")
-    print("|")
+        print(f"|  P{pid}  ", end="\t")
+    print("| ")
     for time in times:
         print(f"{time}\t", end="")
     print(gantt_chart[-1][2])
-
 
 #MAIN MENU
 def display_menu():
