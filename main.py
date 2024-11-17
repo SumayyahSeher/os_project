@@ -1,5 +1,5 @@
 import process_info
-
+import bankers
 
 
 def get_process_list():
@@ -54,9 +54,9 @@ def FCFS(process_list):
 def display_process_data_FCFS(process_list):
     process_list.sort(key=lambda process: process.getProcessID())
 
-    print("+=======+===============+===============+==============+=================+")
-    print("| P.ID  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+=======+===============+===============+==============+=================+")
+    print("+==========+===============+===============+==============+=================+")
+    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
+    print("+==========+===============+===============+==============+=================+")
     total_WT=0
     total_TAT=0
     for i in range(len(process_list)):
@@ -64,11 +64,11 @@ def display_process_data_FCFS(process_list):
         total_WT+= process_list[i].getWaitTime()
         total_TAT+= process_list[i].getTurnaroundTime()
 
-        print("| P", process_list[i].getProcessID(), "\t|",                 # P.ID
-                "    ", process_list[i].getArrivalTime(), " \t| ",            # Arrival Time
-                "   ", process_list[i].getBurstTime(), " \t|",              # Burst Time
-                "   ", process_list[i].getWaitTime(), " \t| ",       # Turnaround Time
-                "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  # Waiting Time 
+        print("| P", process_list[i].getProcessID(), "\t|", # P.ID
+                "    ", process_list[i].getArrivalTime(), " \t| ",# Arrival Time
+                "   ", process_list[i].getBurstTime(), " \t|", # Burst Time
+                "   ", process_list[i].getWaitTime(), " \t| ", # Waiting Time
+                "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  # Turnaround Time 
         print()
     print("+=======+===============+===============+=================+===============+")
     # calculating average WT and TAT
@@ -121,9 +121,9 @@ def non_preemptive(process_list):
 def display_process_data_non_preemptive(process_list):
     process_list.sort(key=lambda process: process.getProcessID())
 
-    print("+=======+===============+===============+==============+=================+")
-    print("| P.ID  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+=======+===============+===============+==============+=================+")
+    print("+==========+===============+===============+==============+=================+")
+    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
+    print("+==========+===============+===============+==============+=================+")
     total_WT = 0
     total_TAT = 0
     for i in range(len(process_list)):
@@ -203,9 +203,9 @@ def sjf_preemptive(process_list):
     return process_list, gantt_chart
 
 def display_process_data_preemptive(process_list):
-    print("+=======+===============+===============+==============+=================+")
-    print("| P.ID  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+=======+===============+===============+==============+=================+")
+    print("+==========+===============+===============+==============+=================+")
+    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
+    print("+==========+===============+===============+==============+=================+")
     total_WT = 0
     total_TAT = 0
     for i in range(len(process_list)):
@@ -246,11 +246,12 @@ def display_menu():
     print("1. First Come First Serve (FCFS)")
     print("2. Shortest Job First")
     print("3. Round Robin")
-    print("4. Exit")
+    print("4. Banker's Algorithm")
+    print("5. Exit")
 
 
 def main():
-    process_list = get_process_list()
+    
 
     while True:
         print("\nChoose a CPU scheduling algorithm")
@@ -258,6 +259,7 @@ def main():
         choice = input()
 
         if choice == "1":
+            process_list = get_process_list()
             print("\n+==================+ First Come First Serve (FCFS) +==================+")
             process_list_FCFS = FCFS(process_list)  # FCFS scheduling
             display_process_data_FCFS(process_list_FCFS)
@@ -268,8 +270,10 @@ def main():
                 print("\nChoose Non-Preemptive or Preemptive")
                 print("1. Non-Preemptive Shortest Job First")
                 print("2. Preemptive Shortest Job First")
+                print("3. Back")
                 choice1 = input()
                 if choice1 == "1":
+                    process_list = get_process_list()
                     print("\n+==================+ Non-Preemptive Shortest Job First (SJF) +==================+")
                     process_list_SJF = non_preemptive(process_list)
                     display_process_data_non_preemptive(process_list_SJF)
@@ -277,12 +281,16 @@ def main():
                     break  
 
                 elif choice1 == "2":
+                    process_list = get_process_list()
                     print("\n+==================+ Preemptive Shortest Job First (SJF) +==================+")
                     process_list_preemptive, gantt_chart = sjf_preemptive(process_list) 
                     display_process_data_preemptive(process_list_preemptive)
                     display_gantt_chart_preemptive(gantt_chart)
                     break  
 
+                elif choice1 == "3":
+                    break
+                
                 else:
                     print("Invalid choice. Please try again.")
 
@@ -292,7 +300,10 @@ def main():
             break
 
         elif choice == "4":
-            print("Exiting the program.")
+            bankers.banker_main()
+
+        elif choice == "5":
+            print("Exiting program")
             break
 
         else:
