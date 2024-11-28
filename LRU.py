@@ -18,7 +18,7 @@ def lruAlgorithm(frameSize, referenceString):
     hitPer = (hits / totalReferences) * 100
     missPer = (misses / totalReferences) * 100
     return pageFaults, hits, misses, hitPer, missPer
-if __name__ == "__main__":
+def lru_main():
     f = int(input("Enter the number of frames: "))
     r = list(map(int, input("Enter the reference string (space-separated integers): ").split()))
     pageFaults, hits, misses, hitPer, missPer = lruAlgorithm(f, r)
