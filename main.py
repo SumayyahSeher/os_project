@@ -181,47 +181,30 @@ def sjf_preemptive(process_list):
     time = 0
     ready_queue = []
     completed_processes = []
-    
-    # Keep a record of the original burst times
     original_burst_times = {process.getProcessID(): process.getBurstTime() for process in process_list}
-
     while len(completed_processes) < len(process_list):
-        # Add processes to the ready queue if they have arrived
         for process in process_list:
             if process.getArrivalTime() <= time and process not in ready_queue and process not in completed_processes:
                 ready_queue.append(process)
-        
         if ready_queue:
-            # Sort ready queue by burst time
             ready_queue.sort(key=lambda p: p.getBurstTime())
             current_process = ready_queue[0]
-            
-            # Record the start time if this is the first time executing the process
             if current_process.getStartingTime() is None:
                 current_process.setStartingTime(time)
-            
-            # Add to Gantt chart
             gantt_chart.append((current_process.getProcessID(), time, time + 1))
-            time += 1
-            
-            # Decrease the burst time of the current process
+            time += 1            
             current_process.setBurstTime(current_process.getBurstTime() - 1)
-            
-            # If the process finishes execution
             if current_process.getBurstTime() == 0:
                 current_process.setCompletionTime(time)
-                TAT = time - current_process.getArrivalTime()  # Turnaround Time
+                TAT = time - current_process.getArrivalTime()  
                 current_process.TAT = TAT
                 current_process.wait_time = TAT - original_burst_times[current_process.getProcessID()]  # Waiting Time
                 completed_processes.append(current_process)
                 ready_queue.remove(current_process)
         else:
-            time += 1  # Increment time if no process is ready
+            time += 1  
     
     return process_list, gantt_chart
-
-
-
 def display_process_data_preemptive(process_list, original_burst_times):
     print("+==========+===============+===============+==============+=================+")
     print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
@@ -233,7 +216,7 @@ def display_process_data_preemptive(process_list, original_burst_times):
         total_TAT += process.getTurnaroundTime()
         print("| P", process.getProcessID(), "\t|",                 
               "    ", process.getArrivalTime(), " \t| ",           
-              "   ", original_burst_times[process.getProcessID()], " \t|",  # Display original burst time
+              "   ", original_burst_times[process.getProcessID()], " \t|", 
               "   ", process.getWaitTime(), " \t| ",               
               "      ", process.getTurnaroundTime(), " \t  |", end="")  
         print()
@@ -337,7 +320,7 @@ def main():
                     break
             
                 elif choice1 == "3":
-                    LRU.lru_main()  # Call the LRU implementation
+                    LRU.lru_main() 
                     break
         
                 else:
