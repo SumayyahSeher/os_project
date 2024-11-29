@@ -54,9 +54,7 @@ def OptimalAlgorithm(frameSize, referenceString):
 
     return pageFaults, hits, misses, hitPer, missPer
 
-
-
-if __name__ == "__main__":
+def opt_main():
     f = int(input("Enter the number of frames: "))
     r = list(map(int, input("Enter the reference string (space-separated integers): ").split()))
 
@@ -67,3 +65,7 @@ if __name__ == "__main__":
     print(f"Misses: {misses}")
     print(f"Hit Ratio: {hitPer:2f}%")
     print(f"Miss Ratio: {missPer:2f}%")
+
+
+if __name__ == "__main__":
+    opt_main()
