@@ -317,7 +317,7 @@ def main():
                     print("FIFO Algorithm not implemented yet.") 
                     break  
                 elif choice1 == "2":
-                    OptimalAlgoritm. 
+                    OptimalAlgoritm.main() 
                     break
             
                 elif choice1 == "3":
