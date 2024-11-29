@@ -1,6 +1,7 @@
 import process_info
 import bankers
 import LRU
+import OptimalAlgorithm
 
 def get_process_list():
     process_list = []
@@ -316,7 +317,7 @@ def main():
                     print("FIFO Algorithm not implemented yet.") 
                     break  
                 elif choice1 == "2":
-                    print("Optimal Algorithm not implemented yet.")  
+                    OptimalAlgoritm. 
                     break
             
                 elif choice1 == "3":
