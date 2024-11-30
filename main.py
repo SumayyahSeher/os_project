@@ -55,9 +55,9 @@ def FCFS(process_list):
 def display_process_data_FCFS(process_list):
     process_list.sort(key=lambda process: process.getProcessID())
 
-    print("+==========+===============+===============+==============+=================+")
-    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+==========+===============+===============+==============+=================+")
+    print("+==========+===================+===================+===================+=====================+")
+    print("| Process  |  Arrival Time(ms) |   Burst Time(ms)  | Waiting Time(ms)  | Turnaround Time(ms) |")
+    print("+==========+===================+===================+===================+=====================+")
     total_WT=0
     total_TAT=0
     for i in range(len(process_list)):
@@ -65,26 +65,27 @@ def display_process_data_FCFS(process_list):
         total_WT+= process_list[i].getWaitTime()
         total_TAT+= process_list[i].getTurnaroundTime()
 
-        print("| P", process_list[i].getProcessID(), "\t|", # P.ID
-                "    ", process_list[i].getArrivalTime(), " \t| ",# Arrival Time
-                "   ", process_list[i].getBurstTime(), " \t|", # Burst Time
-                "   ", process_list[i].getWaitTime(), " \t| ", # Waiting Time
-                "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  # Turnaround Time 
-        print()
-    print("+=======+===============+===============+=================+===============+")
+        print("| P{:<8}| {:^18}| {:^18}| {:^18}| {:^21}|".format(
+        process_list[i].getProcessID(),
+        process_list[i].getArrivalTime(),
+        process_list[i].getBurstTime(),
+        process_list[i].getWaitTime(),
+        process_list[i].getTurnaroundTime()
+        ))
+    print("+==========+===================+===================+===================+=====================+")
     # calculating average WT and TAT
     avg_WT=total_WT/len(process_list)      
     avg_TAT=total_TAT/len(process_list)
 
-    print(f'\n Average Waiting Time:  {avg_WT}')
-    print(f' Average Turnaround Time:  {avg_TAT}')
+    print(f'\n Average Waiting Time:  {avg_WT} ms')
+    print(f' Average Turnaround Time:  {avg_TAT} ms')
     print("+=======+===============+===============+=================+===============+")
     print("")
 
 
 def display_gantt_chart_FCFS(process_list):  
     process_list.sort(key=lambda process: process.getArrivalTime())  
-    print("===================GANTT CHART======================")
+    print("===================GANTT CHART (FCFS)======================")
 
     for k in range(0, len(process_list)):
         print(f"|  P{process_list[k].getProcessID()}  ", end="\t")
@@ -122,21 +123,22 @@ def non_preemptive(process_list):
 def display_process_data_non_preemptive(process_list):
     process_list.sort(key=lambda process: process.getProcessID())
 
-    print("+==========+===============+===============+==============+=================+")
-    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+==========+===============+===============+==============+=================+")
+    print("+==========+===================+===================+===================+=====================+")
+    print("| Process  |  Arrival Time(ms) |   Burst Time(ms)  | Waiting Time(ms)  | Turnaround Time(ms) |")
+    print("+==========+===================+===================+===================+=====================+")
     total_WT = 0
     total_TAT = 0
     for i in range(len(process_list)):
         total_WT += process_list[i].getWaitTime()
         total_TAT += process_list[i].getTurnaroundTime()
-        print("| P", process_list[i].getProcessID(), "\t|",                 
-              "    ", process_list[i].getArrivalTime(), " \t| ",           
-              "   ", process_list[i].getBurstTime(), " \t|",                
-              "   ", process_list[i].getWaitTime(), " \t| ",               
-              "      ", process_list[i].getTurnaroundTime(), " \t  |", end="")  
-        print()
-    print("+=======+===============+===============+=================+===============+")
+        print("| P{:<8}| {:^18}| {:^18}| {:^18}| {:^21}|".format(
+        process_list[i].getProcessID(),
+        process_list[i].getArrivalTime(),
+        process_list[i].getBurstTime(),
+        process_list[i].getWaitTime(),
+        process_list[i].getTurnaroundTime()
+        ))
+    print("+==========+===================+===================+===================+=====================+")
     avg_WT = total_WT / len(process_list)
     avg_TAT = total_TAT / len(process_list)
     print(f'\n Average Waiting Time:  {avg_WT}')
@@ -207,21 +209,22 @@ def sjf_preemptive(process_list):
     
     return process_list, gantt_chart
 def display_process_data_preemptive(process_list, original_burst_times):
-    print("+==========+===============+===============+==============+=================+")
-    print("| Process  |  Arrival Time |   Burst Time  | Waiting Time | Turnaround Time |")
-    print("+==========+===============+===============+==============+=================+")
+    print("+==========+===================+===================+===================+=====================+")
+    print("| Process  |  Arrival Time(ms) |   Burst Time(ms)  | Waiting Time(ms)  | Turnaround Time(ms) |")
+    print("+==========+===================+===================+===================+=====================+")
     total_WT = 0
     total_TAT = 0
     for process in process_list:
         total_WT += process.getWaitTime()
         total_TAT += process.getTurnaroundTime()
-        print("| P", process.getProcessID(), "\t|",                 
-              "    ", process.getArrivalTime(), " \t| ",           
-              "   ", original_burst_times[process.getProcessID()], " \t|", 
-              "   ", process.getWaitTime(), " \t| ",               
-              "      ", process.getTurnaroundTime(), " \t  |", end="")  
-        print()
-    print("+==========+===============+===============+==============+=================+")
+        print("| P{:<8}| {:^18}| {:^18}| {:^18}| {:^21}|".format(
+        process.getProcessID(),
+        process.getArrivalTime(),
+        process.getBurstTime(),
+        process.getWaitTime(),
+        process.getTurnaroundTime()
+        ))
+    print("+==========+===================+===================+===================+=====================+")
     avg_WT = total_WT / len(process_list)
     avg_TAT = total_TAT / len(process_list)
     print(f'\n Average Waiting Time:  {avg_WT}')
@@ -284,7 +287,7 @@ def main():
                     process_list_SJF = non_preemptive(process_list)
                     display_process_data_non_preemptive(process_list_SJF)
                     display_gantt_chart_non_preemptive(process_list_SJF)
-                    break  
+                     
 
                 elif choice1 == "2":
                    process_list = get_process_list()
@@ -293,35 +296,43 @@ def main():
                    process_list_preemptive, gantt_chart = sjf_preemptive(process_list)
                    display_process_data_preemptive(process_list_preemptive, original_burst_times)
                    display_gantt_chart_preemptive(gantt_chart)
-                   break  
+
+                elif choice1 == "3":
+                    print("Going back to main menu")  
+                    break
+
                 else:
                     print("Invalid choice. Please try again.")
 
         elif choice == "3":
             time_quantum = int(input("Enter Time Quantum for Round Robin: "))
             # round_robin(process_list, time_quantum)  # Round Robin
-            break
+            
 
         elif choice == "4":
             bankers.banker_main()
-            break;
+            
+
         elif choice == "5":
             while True: 
                 print("\nChoose a Page Replacement Algorithm:")
                 print("1. First In First Out (FIFO)")
                 print("2. Optimal")
                 print("3. Least Recently Used (LRU)")
-                print("4. Break")
+                print("4. Back")
                 choice1 = input("Enter your choice: ")
                 if choice1 == "1":
                     print("FIFO Algorithm not implemented yet.") 
-                    break  
+                      
                 elif choice1 == "2":
                     OptimalAlgorithm.opt_main()
-                    break
+                    
             
                 elif choice1 == "3":
                     LRU.lru_main() 
+                    
+                elif choice1 == "4":
+                    print("Going back to main menu")  
                     break
         
                 else:
