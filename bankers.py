@@ -4,24 +4,29 @@ def get_input():
 
     allocation= []
 
-    print("Enter allocations for each process -Allocation Matrix: ")
+    print("Enter allocations for each process (space-separated integers) -Allocation Matrix: ")
 
     for i in range(proc):
-        allocated= input(f"P [{i}]: ")
-        allocated_list=[int(ele) for ele in allocated.split()]
-        allocation.append(allocated_list)
+        while True:
+            allocated = input(f"P[{i}]: ")
+            allocated_list = [int(ele) for ele in allocated.split()]
+            if len(allocated_list) == res:
+                allocation.append(allocated_list)
+                break
+            else:
+                print(f"Invalid input! Please enter exactly {res} resource values.")
 
 
     max=[]
 
-    print("Enter maximum requests for each process -Max Matrix: ")
+    print("Enter maximum requests for each process (space-separated integers) -Max Matrix: ")
 
     for i in range(proc):
         max_req= input(f"P [{i}]: ")
         max_req_list=[int(ele) for ele in max_req.split()]
         max.append(max_req_list)
 
-    available_res= input("Enter available matrix: ")
+    available_res= input("Enter available matrix (space-separated integers): ")
     available= [int(ele) for ele in available_res.split()]
 
     return proc,res,allocation,max,available
