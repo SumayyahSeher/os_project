@@ -2,6 +2,7 @@ import process_info
 import bankers
 import LRU
 import RoundRobin
+import FIFO
 import OptimalAlgorithm
 
 def get_process_list():
@@ -286,8 +287,7 @@ def main():
                    display_gantt_chart_preemptive(gantt_chart)
 
                 elif choice1 == "3":
-                    RoundRobin. printData()
-                    print("Going back to main menu")  
+                    RoundRobin.printData()  
                     break
 
                 else:
@@ -309,8 +309,8 @@ def main():
                 print("4. Back")
                 choice1 = input("Enter your choice: ")
                 if choice1 == "1":
-                    print("FIFO Algorithm not implemented yet.") 
-                      
+                    FIFO.fifo_main()
+                    
                 elif choice1 == "2":
                     OptimalAlgorithm.opt_main()
             
