@@ -3,7 +3,6 @@ def optimalPageReplace(frame, fsize, reference, index, totalReferences):
     farthest = -1
     pageToReplace = -1
 
-    
     for i in range(fsize):
         nextUse = -1
         for j in range(index + 1, totalReferences):
@@ -19,7 +18,6 @@ def optimalPageReplace(frame, fsize, reference, index, totalReferences):
             pageToReplace = i
 
     return pageToReplace
-
 
 def OptimalAlgorithm(frameSize, referenceString):
     frame = [-1] * frameSize 
@@ -48,7 +46,6 @@ def OptimalAlgorithm(frameSize, referenceString):
                 pageToReplace = optimalPageReplace(frame, frameSize, referenceString, i, totalReferences)
                 frame[pageToReplace] = page
 
-
     hitPer = (hits / totalReferences)*100
     missPer = (misses / totalReferences) *100
 
@@ -65,7 +62,6 @@ def opt_main():
     print(f"Misses: {misses}")
     print(f"Hit Ratio: {hitPer:2f}%")
     print(f"Miss Ratio: {missPer:2f}%")
-
 
 if __name__ == "__main__":
     opt_main()

@@ -19,9 +19,7 @@ def get_process_list():
 
     return process_list
 
-#FCFS
 def FCFS(process_list):
-    
     # sort based on arrival time
     process_list.sort(key=lambda process: process.getArrivalTime()) 
 
@@ -29,9 +27,7 @@ def FCFS(process_list):
     process_list[0].setStartingTime(0) #P! start time=0
     process_list[0].setCompletionTime(process_list[0].getStartingTime() + process_list[0].getBurstTime())
 
-
     for i in range(1, len(process_list)):
-
         if process_list[i-1].getCompletionTime() > process_list[i].getArrivalTime(): # if previous process still executing when new arrives
             process_list[i].setStartingTime(process_list[i-1].getCompletionTime()) #no preemption so needs to wait for previous process to complete
         else:
@@ -40,16 +36,12 @@ def FCFS(process_list):
         # completion time= start time+burst time    
         process_list[i].setCompletionTime(process_list[i].getStartingTime() + process_list[i].getBurstTime())
 
-
     # calculating waiting time and turn around time
     for i in range(len(process_list)):
         process_list[i].wait_time=process_list[i].getStartingTime()-process_list[i].getArrivalTime() #WT= start time-arrival
         process_list[i].TAT= process_list[i].getCompletionTime()-process_list[i].getArrivalTime() #TAT= end time-arrival
 
     return process_list    
-
-
-       
 
     
 def display_process_data_FCFS(process_list):
@@ -82,7 +74,6 @@ def display_process_data_FCFS(process_list):
     print("+=======+===============+===============+=================+===============+")
     print("")
 
-
 def display_gantt_chart_FCFS(process_list):  
     process_list.sort(key=lambda process: process.getArrivalTime())  
     print("===================GANTT CHART (FCFS)======================")
@@ -91,12 +82,10 @@ def display_gantt_chart_FCFS(process_list):
         print(f"|  P{process_list[k].getProcessID()}  ", end="\t")
     print("| ")
 
-
     for i in range(len(process_list)):
         print(process_list[i].getStartingTime() , end="\t") #gantt chart values will be start time fo each process
 
     print( process_list[-1].getCompletionTime(), end="\t") #last value is end time of last process
-
     print("")
 
 #SJF- NON-PREEMPTIVE
@@ -258,10 +247,8 @@ def display_menu():
     print("5. Page Replacement Algorithm")
     print("6. Exit")
 
-
 def main():
     
-
     while True:
         print("\nChoose a CPU scheduling algorithm")
         display_menu()
@@ -308,11 +295,9 @@ def main():
             time_quantum = int(input("Enter Time Quantum for Round Robin: "))
             # round_robin(process_list, time_quantum)  # Round Robin
             
-
         elif choice == "4":
             bankers.banker_main()
             
-
         elif choice == "5":
             while True: 
                 print("\nChoose a Page Replacement Algorithm:")
@@ -326,7 +311,6 @@ def main():
                       
                 elif choice1 == "2":
                     OptimalAlgorithm.opt_main()
-                    
             
                 elif choice1 == "3":
                     LRU.lru_main() 
