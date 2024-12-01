@@ -5,8 +5,10 @@ class RoundRobin:
         for i in range(no_of_processes):
             temporary = []
             process_id = i+1
-            arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
-            burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
+            arrival_time = int(input(f" P[{process_id}] Arrival Time: "))
+            burst_time = int(input(f" P[{process_id}] Burst Time: "))
+            print("+=======+===============+===============+=================+===============+")
+            print("")
             temporary.extend([process_id, arrival_time, burst_time, 0, burst_time])
 
             #'0' is the state of the process. 0 means not executed and 1 means execution complete
@@ -17,7 +19,7 @@ class RoundRobin:
         RoundRobin.schedulingProcess(self, process_data, time_quantum)
 
     def drawGanttChart(self, process_data, executed_process, start_time, exit_time):
-        print("\nGantt Chart:")
+        print("\n===================GANTT CHART (Round Robin)======================")
         for process_id in executed_process:
             print(f"| P{process_id} ", end="")
         print("|")
@@ -163,8 +165,9 @@ class RoundRobin:
         print()
 
         #Sort processes according to the Process ID
-
-        print("Process_ID  Arrival_Time  Burst_Time  Completion_Time  Turnaround_Time  Waiting_Time")
+        print("+==========+===================+===================+===================+=====================+")
+        print("| Process  |  Arrival Time(ms) |   Burst Time(ms)  | Waiting Time(ms)  | Turnaround Time(ms) |")
+        print("+==========+===================+===================+===================+=====================+")
         for i in range(len(process_data)):
             for j in range(len(process_data[i])):
                 if(j!=2 and j!=3):
@@ -176,10 +179,14 @@ class RoundRobin:
         print(f'Average Waiting Time: {average_WT}')
 
         print(f'Sequence of Processes: {executed_process}')
+        print("+------------------------------+------------------------------+------------------------------+")
+        print("+------------------------------+------------------------------+------------------------------+")
         print()
-         
+
 # The following lines should be at the same indentation level as the class definition
 if __name__ == "__main__":
     no_of_processes = int(input("Enter number of processes: "))
+    print("+---------------+---------------+-----------------+")
+    print("+---------------+---------------+-----------------+")
     rr = RoundRobin()
     rr.processData(no_of_processes)
