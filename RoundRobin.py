@@ -165,11 +165,11 @@ class RoundRobin:
         print()
 
         #Sort processes according to the Process ID
-    print("+==========+==================+================+===================+===================+=====================+")
-    print("| Process  | Arrival Time(ms) | Burst Time(ms) | Completion Time(ms)| Turnaround Time(ms)| Waiting Time(ms)  |")
-    print("+==========+==================+================+===================+===================+=====================+")
 
-    total_WT = 0
+        print("+==========+==================+===============+=============+===================+=====================+")
+        print("| Process  | Arrival Time(ms)| Burst Time(ms) | End Time(ms)|Turnaround Time(ms)| Waiting Time(ms)    |")
+        print("+==========+==================+===============+=============+===================+=====================+")
+
         for i in range(len(process_data)):
             for j in range(len(process_data[i])):
                 if(j!=2 and j!=3):
