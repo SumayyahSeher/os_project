@@ -294,7 +294,8 @@ def main():
                    display_gantt_chart_preemptive(gantt_chart)
 
                 elif choice1 == "3":
-                    RoundRobin.printData()  
+                   rr = RoundRobin()
+                   rr.processData(0)  
                     break
 
                 else:
