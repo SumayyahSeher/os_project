@@ -3,6 +3,7 @@ import bankers
 import LRU
 import FIFO
 import OptimalAlgorithm
+from RoundRobin import RoundRobin
 
 def get_process_list():
     process_list = []
@@ -190,58 +191,6 @@ def display_gantt_chart_preemptive(gantt_chart):
         print(f"{time}\t", end="")
     print(gantt_chart[-1][2])
 
-#Round Robin
-class RoundRobin:
-    def __init__(self):
-        self.queue = []
-        self.time = 0
-        self.process_list = []
-
-    def processData(self, num_processes):
-        self.process_list = get_process_list()
-        quantum = int(input("Enter Time Quantum for Round Robin: "))
-
-        for process in self.process_list:
-            process.remaining_burst_time = process.getBurstTime()
-        
-        gantt_chart = []
-        self.queue = [p for p in self.process_list if p.getArrivalTime() <= self.time]
-        
-        while self.queue:
-            current_process = self.queue.pop(0)
-            start_time = self.time
-            if current_process.remaining_burst_time > quantum:
-                self.time += quantum
-                current_process.remaining_burst_time -= quantum
-                gantt_chart.append((current_process.getProcessID(), start_time, self.time))
-                self.queue.extend([p for p in self.process_list if p.getArrivalTime() <= self.time and p.remaining_burst_time > 0 and p not in self.queue])
-                self.queue.append(current_process)  # Re-add to the queue
-            else:
-                self.time += current_process.remaining_burst_time
-                gantt_chart.append((current_process.getProcessID(), start_time, self.time))
-                current_process.setCompletionTime(self.time)
-                current_process.TAT = self.time - current_process.getArrivalTime()
-                current_process.wait_time = current_process.TAT - current_process.getBurstTime()
-                current_process.remaining_burst_time = 0
-
-        self.display_gantt_chart(gantt_chart)
-        display_process_data(self.process_list)
-
-    def display_gantt_chart(self, gantt_chart):
-        print("\n==================== GANTT CHART (Round Robin) ====================")
-        
-        # Printing the process blocks in the format: | P1 | P2 | P3 | ...
-        print("|", end=" ")
-        for pid, _, _ in gantt_chart:
-            print(f"  P{pid}  |", end=" ")
-        print()
-        
-        # Printing the corresponding time values in the format: 0  4  8  12 ...
-        print(" ", end=" ")
-        for _, start, end in gantt_chart:
-            print(f"{start:<7}", end=" ")
-        print(f"{gantt_chart[-1][2]:<7}")
-
 #MAIN MENU
 def display_menu():
     print("1. First Come First Serve (FCFS)")
@@ -288,16 +237,19 @@ def main():
                    display_process_data(process_list_preemptive)
                    display_gantt_chart_preemptive(gantt_chart)
 
-                elif choice1 == "3":
-                    RoundRobin.printData()  
-                    break
+               elif choice1 == "3":
+                 no_of_processes = int(input("Enter number of processes: "))  # Get number of processes
+                 rr = RoundRobin()  # Create an instance of RoundRobin
+                 rr.processData(no_of_processes)  # Call the method to process data
+                 break
 
                 else:
                     print("Invalid choice. Please try again.")
 
         elif choice == "3":
-            rr = RoundRobin()
-            rr.processData(0)
+          no_of_processes = int(input("Enter number of processes: "))  # Get number of processes
+          rr = RoundRobin()  # Create an instance of RoundRobin
+          rr.processData(no_of_processes)  # Call the method to process data
             
         elif choice == "4":
             bankers.banker_main()
