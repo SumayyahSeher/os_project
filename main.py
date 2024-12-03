@@ -11,7 +11,8 @@ def get_process_list():
     for i in range(1, n+1):
         process_id = i
         print("+------------------------------+")
-        arrival_time = int(input(f"P[{process_id}] Arrival time: "))
+        arrival_time_input = input(f"P[{process_id}] Arrival time (default 0): ")
+        arrival_time = int(arrival_time_input) if arrival_time_input else 0
         burst_time = int(input(f"P[{process_id}] Busrt time: "))
 
         process= process_info.Process(process_id,arrival_time,burst_time)
