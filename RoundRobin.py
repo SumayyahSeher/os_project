@@ -9,7 +9,7 @@ class RoundRobin:
             print("+------------------------------+")
             arrival_time_input = input(f"P[{process_id}] Arrival time (default 0): ")
             arrival_time = int(arrival_time_input) if arrival_time_input else 0
-            burst_time = int(input(f"P[{process_id}] Burst Time: "))
+            burst_time = int(input(f" P[{process_id}] Burst Time: "))
             temporary.extend([process_id, arrival_time, burst_time, 0, burst_time])  # Initialize temporary data
             process_data.append(temporary)
 
@@ -99,7 +99,9 @@ class RoundRobin:
             turnaround_time = data[6] if len(data) > 6 else 0
             waiting_time = data[7] if len(data) > 7 else 0
 
-            print(f"| P{data[0]:<6} | {data[1]:^18} | {data[2]:^17} | {end_time:^12} | {turnaround_time:^17} | {waiting_time:^20} |")
+            original_burst_time = data[4]
+
+            print(f"| P{data[0]:<6} | {data[1]:^18} | {original_burst_time:^17} | {end_time:^12} | {turnaround_time:^17} | {waiting_time:^20} |")
         
         print("+==========+===================+===================+==============+===================+=====================+")
             
