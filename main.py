@@ -202,44 +202,50 @@ class RoundRobin:
 
         for process in self.process_list:
             process.remaining_burst_time = process.getBurstTime()
-        
+
         gantt_chart = []
-        self.queue = [p for p in self.process_list if p.getArrivalTime() <= self.time]
-        
-        while self.queue:
-            current_process = self.queue.pop(0)
-            start_time = self.time
-            if current_process.remaining_burst_time > quantum:
-                self.time += quantum
-                current_process.remaining_burst_time -= quantum
-                gantt_chart.append((current_process.getProcessID(), start_time, self.time))
-                self.queue.extend([p for p in self.process_list if p.getArrivalTime() <= self.time and p.remaining_burst_time > 0 and p not in self.queue])
-                self.queue.append(current_process)  # Re-add to the queue
-            else:
-                self.time += current_process.remaining_burst_time
-                gantt_chart.append((current_process.getProcessID(), start_time, self.time))
-                current_process.setCompletionTime(self.time)
-                current_process.TAT = self.time - current_process.getArrivalTime()
-                current_process.wait_time = current_process.TAT - current_process.getBurstTime()
-                current_process.remaining_burst_time = 0
+        self.queue = sorted([p for p in self.process_list if p.getArrivalTime() <= self.time], key=lambda x: x.getArrivalTime())
+
+
+        while any(p.remaining_burst_time > 0 for p in self.process_list):  # Continue until all processes finish
+            for process in self.queue.copy(): # Iterate over a copy to avoid modification during iteration
+                if process.remaining_burst_time <= 0:
+                    self.queue.remove(process)
+                    continue
+
+                start_time = max(self.time, process.getArrivalTime())
+                self.time = start_time
+
+                if process.remaining_burst_time > quantum:
+                    self.time += quantum
+                    process.remaining_burst_time -= quantum
+                    gantt_chart.append((process.getProcessID(), start_time, self.time))
+                    
+                else:
+                    self.time += process.remaining_burst_time
+                    gantt_chart.append((process.getProcessID(), start_time, self.time))
+                    process.setCompletionTime(self.time)
+                    process.TAT = self.time - process.getArrivalTime()
+                    process.wait_time = process.TAT - process.getBurstTime()
+                    process.remaining_burst_time = 0
+                    self.queue.remove(process)
+
+                new_processes = [p for p in self.process_list if p.getArrivalTime() <= self.time and p.remaining_burst_time > 0 and p not in self.queue]
+                self.queue.extend(sorted(new_processes, key=lambda x: x.getArrivalTime()))
 
         self.display_gantt_chart(gantt_chart)
         display_process_data(self.process_list)
 
     def display_gantt_chart(self, gantt_chart):
         print("\n==================== GANTT CHART (Round Robin) ====================")
-        
-        # Printing the process blocks in the format: | P1 | P2 | P3 | ...
         print("|", end=" ")
         for pid, _, _ in gantt_chart:
-            print(f"  P{pid}  |", end=" ")
+            print(f" P{pid} |", end=" ")
         print()
-        
-        # Printing the corresponding time values in the format: 0  4  8  12 ...
         print(" ", end=" ")
         for _, start, end in gantt_chart:
-            print(f"{start:<7}", end=" ")
-        print(f"{gantt_chart[-1][2]:<7}")
+            print(f"{start:<4}", end=" ")
+        print(f"{gantt_chart[-1][2]:<4}")
 
 #MAIN MENU
 def display_menu():
