@@ -6,9 +6,10 @@ class RoundRobin:
         for i in range(no_of_processes):
             temporary = []
             process_id = i + 1
-            arrival_time = int(input(f" P[{process_id}] Arrival Time: "))
+            print("+------------------------------+")
+            arrival_time_input = input(f"P[{process_id}] Arrival time (default 0): ")
+            arrival_time = int(arrival_time_input) if arrival_time_input else 0
             burst_time = int(input(f" P[{process_id}] Burst Time: "))
-            print("==========================================================================")
             temporary.extend([process_id, arrival_time, burst_time, 0, burst_time])  # '0' is the state of the process
             process_data.append(temporary)
 
@@ -18,12 +19,12 @@ class RoundRobin:
     def drawGanttChart(self, executed_process, start_time, exit_time):
         print("\n=================== GANTT CHART (Round Robin) =======================")
         for pid in executed_process:
-            print(f"| P{pid} ", end="")
-        print("|")
+            print(f"|  P{pid}  ", end="\t")
+        print("| ")
 
         for time in start_time:
-            print(f"{time:>3}", end=" ")
-        print(f"{exit_time[-1]:>3}")  # Print the end time of the last process
+            print(f"{time}\t", end="")
+        print(f"{exit_time[-1]}")  # Print the end time of the last process
 
     def schedulingProcess(self, process_data, time_quantum):
         start_time = []
@@ -91,9 +92,9 @@ class RoundRobin:
         process_data.sort(key=lambda x: x[0])  # Sort processes according to the Process ID
 
         print("\n======================== ROUND ROBIN SCHEDULING =========================\n")
-        print("+------------+------------------+----------------+---------------+---------------------+-------------------+")
-        print("| Process    | Arrival Time(ms) | Burst Time(ms) | End Time(ms) | Turnaround Time(ms) | Waiting Time(ms)   |")
-        print("+------------+------------------+----------------+---------------+---------------------+-------------------+")
+        print("+==========+===================+===================+==============+===================+=====================+")
+        print("| Process  |  Arrival Time(ms) |   Burst Time(ms)  | End time(ms) | Waiting Time(ms)  | Turnaround Time(ms) |")
+        print("+==========+===================+===================+==============+===================+=====================+")
 
 
         for data in process_data:
@@ -101,12 +102,12 @@ class RoundRobin:
             turnaround_time = data[6] if len(data) > 6 else 0
             waiting_time = data[7] if len(data) > 7 else 0
 
-            print(f"|    P{data[0]:<6} | {data[1]:<16} | {data[2]:<14} | {end_time:<13} | {turnaround_time:<19} | {waiting_time:<17} |")
-            print("+------------+------------------+----------------+---------------+---------------------+-------------------+")
-
+            print(f"| P{data[0]:<6} | {data[1]:^18} | {data[2]:^17} | {end_time:^12} | {turnaround_time:^17} | {waiting_time:^21} |")
+        
+        print("+==========+===================+===================+==============+===================+=====================+")
             
-        print(f'\nAverage Turnaround Time: {average_TAT:.2f}')
-        print(f'Average Waiting Time: {average_WT:.2f}')
+        print(f'Average Waiting Time: {average_WT:.2f} ms')
+        print(f'Average Turnaround Time: {average_TAT:.2f} ms')
         print(f'Sequence of Processes: {executed_process}')
         print("==========================================================================")
 

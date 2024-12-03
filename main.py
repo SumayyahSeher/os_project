@@ -237,11 +237,9 @@ def main():
                    display_process_data(process_list_preemptive)
                    display_gantt_chart_preemptive(gantt_chart)
 
-               elif choice1 == "3":
-                 no_of_processes = int(input("Enter number of processes: "))  # Get number of processes
-                 rr = RoundRobin()  # Create an instance of RoundRobin
-                 rr.processData(no_of_processes)  # Call the method to process data
-                 break
+                elif choice1 == "3":
+                    print("Going back to main menu")
+                    break
 
                 else:
                     print("Invalid choice. Please try again.")
